@@ -4,6 +4,8 @@ import { Injectable, Inject, Injector } from '@angular/core'
 import { defaultModules } from './quill-defaults'
 import { QUILL_CONFIG_TOKEN, QuillConfig } from './quill-editor.interfaces'
 
+declare const Quill: any;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -29,7 +31,8 @@ export class QuillService {
     this.count++
     if (!this.Quill && this.count === 1) {
       this.$importPromise = new Promise(async (resolve) => {
-        // Quill adds events listeners on import https://github.com/quilljs/quill/blob/develop/core/emitter.js#L8
+        /*
+		// Quill adds events listeners on import https://github.com/quilljs/quill/blob/develop/core/emitter.js#L8
         // We'd want to use the unpatched `addEventListener` method to have all event callbacks to be run outside of zone.
         // We don't know yet if the `zone.js` is used or not, just save the value to restore it back further.
         const maybePatchedAddEventListener = this.document.addEventListener
@@ -46,8 +49,9 @@ export class QuillService {
         this.document.addEventListener = this.document['__zone_symbol__addEventListener'] || this.document.addEventListener
         const quillImport = await import('quill')
         this.document.addEventListener = maybePatchedAddEventListener
-
         this.Quill = (quillImport.default ? quillImport.default : quillImport) as any
+		*/
+		this.Quill = Quill;
 
         // Only register custom options and modules once
         this.config.customOptions?.forEach((customOption) => {
